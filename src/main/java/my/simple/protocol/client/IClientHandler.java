@@ -9,4 +9,5 @@ public interface IClientHandler {
     void endSession() throws IOException;
     void welcomeClient() throws IOException;
     String receiveMessage() throws IOException;
+    void closeConnection() throws IOException;
 }

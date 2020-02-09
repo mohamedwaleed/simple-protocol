@@ -20,19 +20,16 @@ public class SimpleProtocolClientHandler implements IClientHandler {
     private BufferedReader input;
     private Session session;
     private String clientName;
-    private Socket clientSocket;
 
-    public SimpleProtocolClientHandler(Socket clientSocket, Session session) throws IOException {
+    public SimpleProtocolClientHandler(InputStream inputStream,OutputStream outputStream, Session session) throws IOException {
         output = new BufferedWriter(
-                new OutputStreamWriter(clientSocket.getOutputStream(), StandardCharsets.UTF_8)
+                new OutputStreamWriter(outputStream, StandardCharsets.UTF_8)
         );
 
         input = new BufferedReader(
-                new InputStreamReader(clientSocket.getInputStream(), StandardCharsets.UTF_8)
+                new InputStreamReader(inputStream, StandardCharsets.UTF_8)
         );
         this.session = session;
-        this.clientSocket = clientSocket;
-        this.clientSocket.setSoTimeout(session.getTimeout());
     }
 
     @Override
@@ -89,9 +86,9 @@ public class SimpleProtocolClientHandler implements IClientHandler {
         this.clientName = clientName;
     }
 
-    private void closeConnection() throws IOException {
+    @Override
+    public void closeConnection() throws IOException {
         input.close();
         output.close();
-        clientSocket.close();
     }
 }

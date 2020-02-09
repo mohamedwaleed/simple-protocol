@@ -5,6 +5,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Date;
 
+import my.simple.protocol.client.ClientProcess;
 import my.simple.protocol.client.IClientHandler;
 import my.simple.protocol.client.SimpleProtocolClientHandler;
 import my.simple.protocol.server.session.Session;
@@ -23,9 +24,9 @@ public class SimpleProtocolServer {
             while(true) {
                 Socket socket = serverSocket.accept();
                 Session session = Session.createNewSession(new UUIDSessionIdGenerator(), new Date(), 30000);
-                IClientHandler clientHandler =
-                        new SimpleProtocolClientHandler(socket, session);
-                clientHandler.handle();
+                Thread thread = new Thread(new ClientProcess(socket, session));
+                thread.start();
+                logger.info("new client connect with session id" + session.getSessionId());
             }
         } catch (IOException e) {
             logger.error(e.getMessage());
