@@ -29,7 +29,15 @@ public class Message {
         return "EDGE ADDED";
     }
 
-    public static String edgeExists() {
+    public static String nodeRemoved() {
+        return "NODE REMOVED";
+    }
+
+    public static String nodeNotFound() {
         return "ERROR: NODE NOT FOUND";
+    }
+
+    public static String edgeRemoved() {
+        return "EDGE REMOVED";
     }
 }

@@ -17,4 +17,9 @@ public class Pair<T1, T2> {
     public T2 getSecond() {
         return Second;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return this.getFirst() == ((Pair)obj).getFirst();
+    }
 }
