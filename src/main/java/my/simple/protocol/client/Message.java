@@ -1,5 +1,7 @@
 package my.simple.protocol.client;
 
+import java.util.List;
+
 public class Message {
     public static String byeBye(String clientName, long duration) {
         return "BYE " + clientName + ", WE SPOKE FOR " + duration + " MS";
@@ -39,5 +41,13 @@ public class Message {
 
     public static String edgeRemoved() {
         return "EDGE REMOVED";
+    }
+
+    public static String weight(long weight) {
+        return "" + weight;
+    }
+
+    public static String nodeList(List<String> nodes) {
+        return String.join(",", nodes);
     }
 }

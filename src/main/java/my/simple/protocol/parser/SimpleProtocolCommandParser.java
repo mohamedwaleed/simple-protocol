@@ -14,7 +14,6 @@ public class SimpleProtocolCommandParser implements IParser {
     @Override
     public Command parse(String command) {
         String []tokens = command.split(" ");
-        System.out.println(command);
         String firstToken = tokens[0];
         String secondToken = null;
         switch (firstToken) {
@@ -44,6 +43,15 @@ public class SimpleProtocolCommandParser implements IParser {
                     String nodeY = tokens[3];
                     return new RemoveEdgeCommand(clientHandler, nodeX, nodeY);
                 }
+            case "SHORTEST":
+                String nodeX = tokens[2];
+                String nodeY = tokens[3];
+                return new ShortestPathCommand(clientHandler, nodeX, nodeY);
+            case "CLOSER":
+                int weight = Integer.valueOf(tokens[2]);
+                String node = tokens[3];
+                return new CloserThanCommand(clientHandler, node, weight);
+
 
         }
         return new UnknownCommand();
