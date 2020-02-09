@@ -26,4 +26,12 @@ public class ShortestPathCommand implements Command {
             this.clientHandler.sendMessage(Message.nodeNotFound());
         }
     }
+
+    public String getNodeX() {
+        return nodeX;
+    }
+
+    public String getNodeY() {
+        return nodeY;
+    }
 }

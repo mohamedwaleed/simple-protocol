@@ -94,7 +94,7 @@ public class DirectedGraph {
      @param nodeY the string represents the node y
      @return
      sum of the weights of the shortest path
-     Integer.MAX_VALUE if there is not path between node x and node y
+     Integer.MAX_VALUE if there is no path between node x and node y
      @throws NodeNotFoundException if one of the nodes is not found
      */
     public int shortestPath(String nodeX, String nodeY) throws NodeNotFoundException {

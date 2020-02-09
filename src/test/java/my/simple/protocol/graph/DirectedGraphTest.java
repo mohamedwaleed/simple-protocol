@@ -46,6 +46,61 @@ public class DirectedGraphTest {
     }
 
     @Test
+    public void testShortestPathWhenNoPathBetweenNodes() throws NodeNotFoundException {
+        directedGraph.addNode("A");
+        directedGraph.addNode("B");
+        directedGraph.addNode("C");
+        directedGraph.addNode("D");
+        directedGraph.addNode("E");
+        directedGraph.addNode("F");
+        directedGraph.addNode("G");
+        directedGraph.addNode("H");
+
+        directedGraph.addEdge("A","B", 4);
+        directedGraph.addEdge("A","C", 3);
+        directedGraph.addEdge("A","E", 7);
+        directedGraph.addEdge("B","C", 6);
+        directedGraph.addEdge("B","D", 5);
+        directedGraph.addEdge("C","D", 11);
+        directedGraph.addEdge("C","E", 8);
+        directedGraph.addEdge("E","D", 2);
+        directedGraph.addEdge("E","G", 5);
+        directedGraph.addEdge("D","F", 2);
+        directedGraph.addEdge("D","G", 10);
+        directedGraph.addEdge("G","F", 3);
+
+        int actualWeight = directedGraph.shortestPath("A", "H");
+        int expectedWeight = Integer.MAX_VALUE;
+        Assert.assertEquals(expectedWeight, actualWeight);
+    }
+
+    @Test(expected = NodeNotFoundException.class)
+    public void testShortestPathWhenNodesAreNotExisted() throws NodeNotFoundException {
+        directedGraph.addNode("A");
+        directedGraph.addNode("B");
+        directedGraph.addNode("C");
+        directedGraph.addNode("D");
+        directedGraph.addNode("E");
+        directedGraph.addNode("F");
+        directedGraph.addNode("G");
+
+        directedGraph.addEdge("A","B", 4);
+        directedGraph.addEdge("A","C", 3);
+        directedGraph.addEdge("A","E", 7);
+        directedGraph.addEdge("B","C", 6);
+        directedGraph.addEdge("B","D", 5);
+        directedGraph.addEdge("C","D", 11);
+        directedGraph.addEdge("C","E", 8);
+        directedGraph.addEdge("E","D", 2);
+        directedGraph.addEdge("E","G", 5);
+        directedGraph.addEdge("D","F", 2);
+        directedGraph.addEdge("D","G", 10);
+        directedGraph.addEdge("G","F", 3);
+
+        directedGraph.shortestPath("A", "H");
+    }
+
+    @Test
     public void testCloserThan() throws NodeNotFoundException {
         directedGraph.addNode("A");
         directedGraph.addNode("B");
@@ -71,5 +126,31 @@ public class DirectedGraphTest {
         List<String> actualNodeList = directedGraph.closerThan("A", 8);
         List<String> expectedNodeList = Arrays.asList("B", "C", "E");
         Assert.assertEquals(expectedNodeList, actualNodeList);
+    }
+
+    @Test(expected = NodeNotFoundException.class)
+    public void testCloserThanWhenNodesAreNotExisted() throws NodeNotFoundException {
+        directedGraph.addNode("A");
+        directedGraph.addNode("B");
+        directedGraph.addNode("C");
+        directedGraph.addNode("D");
+        directedGraph.addNode("E");
+        directedGraph.addNode("F");
+        directedGraph.addNode("G");
+
+        directedGraph.addEdge("A","B", 4);
+        directedGraph.addEdge("A","C", 3);
+        directedGraph.addEdge("A","E", 7);
+        directedGraph.addEdge("B","C", 6);
+        directedGraph.addEdge("B","D", 5);
+        directedGraph.addEdge("C","D", 11);
+        directedGraph.addEdge("C","E", 8);
+        directedGraph.addEdge("E","D", 2);
+        directedGraph.addEdge("E","G", 5);
+        directedGraph.addEdge("D","F", 2);
+        directedGraph.addEdge("D","G", 10);
+        directedGraph.addEdge("G","F", 3);
+
+        directedGraph.closerThan("H", 8);
     }
 }

@@ -26,4 +26,12 @@ public class RemoveEdgeCommand implements Command {
             this.clientHandler.sendMessage(Message.nodeNotFound());
         }
     }
+
+    public String getNodeY() {
+        return nodeY;
+    }
+
+    public String getNodeX() {
+        return nodeX;
+    }
 }

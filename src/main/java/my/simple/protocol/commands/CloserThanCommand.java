@@ -29,4 +29,12 @@ public class CloserThanCommand implements Command {
             this.clientHandler.sendMessage(Message.nodeNotFound());
         }
     }
+
+    public String getNode() {
+        return node;
+    }
+
+    public int getWeight() {
+        return weight;
+    }
 }

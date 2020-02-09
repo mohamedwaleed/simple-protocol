@@ -1,4 +1,4 @@
-package my.simple.protocol.server;
+package my.simple.protocol.server.session;
 
 import my.simple.protocol.server.session.Session;
 import my.simple.protocol.server.session.UUIDSessionIdGenerator;

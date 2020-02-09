@@ -45,6 +45,19 @@ public class SimpleProtocolCommandParserTest {
     }
 
     @Test
+    public void testParseRemoveNodeCommand() throws IOException {
+        SimpleProtocolCommandParser simpleProtocolCommandParser =
+                new SimpleProtocolCommandParser(null);
+
+        String stringCommand = "REMOVE NODE Phase2-Node-0";
+        Command command = simpleProtocolCommandParser.parse(stringCommand);
+
+        String expectedNode = "Phase2-Node-0";
+        Assert.assertTrue(command instanceof RemoveNodeCommand);
+        Assert.assertEquals(((RemoveNodeCommand) command).getNode(), expectedNode);
+    }
+
+    @Test
     public void testParseAddEdgeCommand() throws IOException {
         SimpleProtocolCommandParser simpleProtocolCommandParser =
                 new SimpleProtocolCommandParser(null);
@@ -59,6 +72,51 @@ public class SimpleProtocolCommandParserTest {
         Assert.assertEquals(((AddEdgeCommand) command).getNodeX(), expectedNodeX);
         Assert.assertEquals(((AddEdgeCommand) command).getNodeY(), expectedNodeY);
         Assert.assertEquals(((AddEdgeCommand) command).getWeight(), expectedWeight);
+    }
+
+    @Test
+    public void testParseRemoveEdgeCommand() throws IOException {
+        SimpleProtocolCommandParser simpleProtocolCommandParser =
+                new SimpleProtocolCommandParser(null);
+
+        String stringCommand = "REMOVE EDGE Phase4-Node-354 Phase4-Node-531";
+        Command command = simpleProtocolCommandParser.parse(stringCommand);
+
+        String expectedNodeX = "Phase4-Node-354";
+        String expectedNodeY = "Phase4-Node-531";
+        Assert.assertTrue(command instanceof RemoveEdgeCommand);
+        Assert.assertEquals(((RemoveEdgeCommand) command).getNodeX(), expectedNodeX);
+        Assert.assertEquals(((RemoveEdgeCommand) command).getNodeY(), expectedNodeY);
+    }
+
+    @Test
+    public void testParseShortestPathCommand() throws IOException {
+        SimpleProtocolCommandParser simpleProtocolCommandParser =
+                new SimpleProtocolCommandParser(null);
+
+        String stringCommand = "SHORTEST PATH Phase4-Node-354 Phase4-Node-531";
+        Command command = simpleProtocolCommandParser.parse(stringCommand);
+
+        String expectedNodeX = "Phase4-Node-354";
+        String expectedNodeY = "Phase4-Node-531";
+        Assert.assertTrue(command instanceof ShortestPathCommand);
+        Assert.assertEquals(((ShortestPathCommand) command).getNodeX(), expectedNodeX);
+        Assert.assertEquals(((ShortestPathCommand) command).getNodeY(), expectedNodeY);
+    }
+
+    @Test
+    public void testParseCloserThanCommand() throws IOException {
+        SimpleProtocolCommandParser simpleProtocolCommandParser =
+                new SimpleProtocolCommandParser(null);
+
+        String stringCommand = "CLOSER THAN 8 Phase4-Node-354";
+        Command command = simpleProtocolCommandParser.parse(stringCommand);
+
+        String expectedNode = "Phase4-Node-354";
+        int expectedWeight = 8;
+        Assert.assertTrue(command instanceof CloserThanCommand);
+        Assert.assertEquals(((CloserThanCommand) command).getNode(), expectedNode);
+        Assert.assertEquals(((CloserThanCommand) command).getWeight(), expectedWeight);
     }
 
     @Test
