@@ -6,15 +6,16 @@ import my.simple.protocol.graph.DirectedGraph;
 import my.simple.protocol.graph.excpetions.NodeNotFoundException;
 
 public class ShortestPathCommand implements Command {
-    private DirectedGraph directedGraph = DirectedGraph.getInstance();
+    private DirectedGraph directedGraph;
     private IClientHandler clientHandler;
     private String nodeX;
     private String nodeY;
 
-    public ShortestPathCommand(IClientHandler clientHandler, String nodeX, String nodeY) {
+    public ShortestPathCommand(IClientHandler<DirectedGraph> clientHandler, String nodeX, String nodeY) {
         this.nodeX = nodeX;
         this.nodeY = nodeY;
         this.clientHandler = clientHandler;
+        this.directedGraph = clientHandler.getSharedObject();
     }
 
     @Override

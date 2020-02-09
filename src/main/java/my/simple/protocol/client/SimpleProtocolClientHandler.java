@@ -1,5 +1,6 @@
 package my.simple.protocol.client;
 
+import my.simple.protocol.graph.DirectedGraph;
 import my.simple.protocol.parser.IParser;
 import my.simple.protocol.parser.SimpleProtocolCommandParser;
 import my.simple.protocol.commands.ByeCommand;
@@ -13,17 +14,18 @@ import java.net.SocketTimeoutException;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
-public class SimpleProtocolClientHandler implements IClientHandler {
+public class SimpleProtocolClientHandler implements IClientHandler<DirectedGraph> {
 
     final static Logger logger = Logger.getLogger(SimpleProtocolClientHandler.class);
 
-    private IParser simpleProtocolCommandParser = new SimpleProtocolCommandParser(this);
+    private IParser simpleProtocolCommandParser;
     private BufferedWriter output;
     private BufferedReader input;
     private Session session;
     private String clientName;
+    private DirectedGraph directedGraph;
 
-    public SimpleProtocolClientHandler(InputStream inputStream,OutputStream outputStream, Session session) throws IOException {
+    public SimpleProtocolClientHandler(InputStream inputStream, OutputStream outputStream, Session session, DirectedGraph directedGraph) throws IOException {
         output = new BufferedWriter(
                 new OutputStreamWriter(outputStream, StandardCharsets.UTF_8)
         );
@@ -32,6 +34,8 @@ public class SimpleProtocolClientHandler implements IClientHandler {
                 new InputStreamReader(inputStream, StandardCharsets.UTF_8)
         );
         this.session = session;
+        this.simpleProtocolCommandParser =  new SimpleProtocolCommandParser(this);
+        this.directedGraph = directedGraph;
     }
 
     @Override
@@ -93,5 +97,10 @@ public class SimpleProtocolClientHandler implements IClientHandler {
     public void closeConnection() throws IOException {
         input.close();
         output.close();
+    }
+
+    @Override
+    public DirectedGraph getSharedObject() {
+        return directedGraph;
     }
 }

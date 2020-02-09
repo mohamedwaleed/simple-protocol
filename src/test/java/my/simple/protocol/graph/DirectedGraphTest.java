@@ -1,5 +1,6 @@
 package my.simple.protocol.graph;
 
+import my.simple.protocol.graph.excpetions.NodeAlreadyExistsException;
 import my.simple.protocol.graph.excpetions.NodeNotFoundException;
 import org.junit.Assert;
 import org.junit.Before;
@@ -18,7 +19,7 @@ public class DirectedGraphTest {
     }
 
     @Test
-    public void testShortestPath() throws NodeNotFoundException {
+    public void testShortestPath() throws NodeNotFoundException, NodeAlreadyExistsException {
         directedGraph.addNode("A");
         directedGraph.addNode("B");
         directedGraph.addNode("C");
@@ -46,7 +47,7 @@ public class DirectedGraphTest {
     }
 
     @Test
-    public void testShortestPathWhenNoPathBetweenNodes() throws NodeNotFoundException {
+    public void testShortestPathWhenNoPathBetweenNodes() throws NodeNotFoundException, NodeAlreadyExistsException {
         directedGraph.addNode("A");
         directedGraph.addNode("B");
         directedGraph.addNode("C");
@@ -75,7 +76,7 @@ public class DirectedGraphTest {
     }
 
     @Test(expected = NodeNotFoundException.class)
-    public void testShortestPathWhenNodesAreNotExisted() throws NodeNotFoundException {
+    public void testShortestPathWhenNodesAreNotExisted() throws NodeNotFoundException, NodeAlreadyExistsException {
         directedGraph.addNode("A");
         directedGraph.addNode("B");
         directedGraph.addNode("C");
@@ -101,7 +102,7 @@ public class DirectedGraphTest {
     }
 
     @Test
-    public void testCloserThan() throws NodeNotFoundException {
+    public void testCloserThan() throws NodeNotFoundException, NodeAlreadyExistsException {
         directedGraph.addNode("A");
         directedGraph.addNode("B");
         directedGraph.addNode("C");
@@ -129,7 +130,7 @@ public class DirectedGraphTest {
     }
 
     @Test(expected = NodeNotFoundException.class)
-    public void testCloserThanWhenNodesAreNotExisted() throws NodeNotFoundException {
+    public void testCloserThanWhenNodesAreNotExisted() throws NodeNotFoundException, NodeAlreadyExistsException {
         directedGraph.addNode("A");
         directedGraph.addNode("B");
         directedGraph.addNode("C");
@@ -152,5 +153,27 @@ public class DirectedGraphTest {
         directedGraph.addEdge("G","F", 3);
 
         directedGraph.closerThan("H", 8);
+    }
+
+
+    @Test(expected = NodeAlreadyExistsException.class)
+    public void testAddNodeWillThrowExceptionWhenNodeIsAlreadyExisted() throws NodeAlreadyExistsException {
+        directedGraph.addNode("A");
+        directedGraph.addNode("A");
+    }
+
+    @Test(expected = NodeNotFoundException.class)
+    public void testRemoveNodeWillThrowExceptionWhenNodeIsNotExisted() throws NodeNotFoundException {
+        directedGraph.removeNode("A");
+    }
+
+    @Test(expected = NodeNotFoundException.class)
+    public void testAddEdgeWillThrowExceptionWhenNodeIsNotExisted() throws NodeNotFoundException {
+        directedGraph.addEdge("A", "B", 1);
+    }
+
+    @Test(expected = NodeNotFoundException.class)
+    public void testRemoveEdgeWillThrowExceptionWhenNodeIsNotExisted() throws NodeNotFoundException {
+        directedGraph.removeEdge("A", "B");
     }
 }

@@ -1,5 +1,6 @@
 package my.simple.protocol.client;
 
+import my.simple.protocol.graph.DirectedGraph;
 import my.simple.protocol.server.session.Session;
 import org.apache.log4j.Logger;
 
@@ -11,13 +12,14 @@ public class ClientProcess implements Runnable {
     private IClientHandler clientHandler;
     private Socket clientSocket;
 
-    public ClientProcess(Socket socket, Session session) throws IOException {
+    public ClientProcess(Socket socket, Session session, DirectedGraph directedGraph) throws IOException {
         this.clientSocket = socket;
         this.clientSocket.setSoTimeout(session.getTimeout());
         this.clientHandler = new SimpleProtocolClientHandler(
                 socket.getInputStream(),
                 socket.getOutputStream(),
-                session
+                session,
+                directedGraph
         );
     }
 

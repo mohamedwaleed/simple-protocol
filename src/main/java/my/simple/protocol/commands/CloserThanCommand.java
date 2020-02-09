@@ -9,15 +9,16 @@ import java.util.List;
 
 public class CloserThanCommand implements Command {
 
-    private DirectedGraph directedGraph = DirectedGraph.getInstance();
     private IClientHandler clientHandler;
     private String node;
     private int weight;
+    private DirectedGraph directedGraph;
 
-    public CloserThanCommand(IClientHandler clientHandler, String node, int weight) {
+    public CloserThanCommand(IClientHandler<DirectedGraph> clientHandler, String node, int weight) {
         this.clientHandler = clientHandler;
         this.node = node;
         this.weight = weight;
+        this.directedGraph = clientHandler.getSharedObject();
     }
 
     @Override

@@ -2,7 +2,7 @@ package my.simple.protocol.client;
 
 import java.io.IOException;
 
-public interface IClientHandler {
+public interface IClientHandler<T> {
     void handle() throws IOException;
     void sendMessage(String message) throws IOException;
     void setClientName(String clientName);
@@ -10,4 +10,5 @@ public interface IClientHandler {
     void welcomeClient() throws IOException;
     String receiveMessage() throws IOException;
     void closeConnection() throws IOException;
+    T getSharedObject();
 }

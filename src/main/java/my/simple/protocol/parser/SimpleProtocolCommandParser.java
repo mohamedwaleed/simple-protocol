@@ -11,6 +11,7 @@ public class SimpleProtocolCommandParser implements IParser {
         this.clientHandler = clientHandler;
     }
 
+
     @Override
     public Command parse(String command) {
         String []tokens = command.split(" ");

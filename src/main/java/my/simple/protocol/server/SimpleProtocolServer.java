@@ -8,6 +8,7 @@ import java.util.Date;
 import my.simple.protocol.client.ClientProcess;
 import my.simple.protocol.client.IClientHandler;
 import my.simple.protocol.client.SimpleProtocolClientHandler;
+import my.simple.protocol.graph.DirectedGraph;
 import my.simple.protocol.server.session.Session;
 import my.simple.protocol.server.session.UUIDSessionIdGenerator;
 import org.apache.log4j.Logger;
@@ -15,6 +16,7 @@ import org.apache.log4j.Logger;
 public class SimpleProtocolServer {
 
     final static Logger logger = Logger.getLogger(SimpleProtocolServer.class);
+    private DirectedGraph directedGraph = DirectedGraph.getInstance();
 
     private ServerSocket serverSocket;
 
@@ -24,7 +26,7 @@ public class SimpleProtocolServer {
             while(true) {
                 Socket socket = serverSocket.accept();
                 Session session = Session.createNewSession(new UUIDSessionIdGenerator(), new Date(), 30000);
-                Thread thread = new Thread(new ClientProcess(socket, session));
+                Thread thread = new Thread(new ClientProcess(socket, session, directedGraph));
                 thread.start();
                 logger.info("new client connect with session id" + session.getSessionId());
             }

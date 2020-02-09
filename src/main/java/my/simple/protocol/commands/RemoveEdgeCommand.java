@@ -3,26 +3,28 @@ package my.simple.protocol.commands;
 import my.simple.protocol.client.IClientHandler;
 import my.simple.protocol.client.Message;
 import my.simple.protocol.graph.DirectedGraph;
+import my.simple.protocol.graph.excpetions.NodeNotFoundException;
 
 public class RemoveEdgeCommand implements Command {
 
-    private DirectedGraph directedGraph = DirectedGraph.getInstance();
+    private DirectedGraph directedGraph;
     private IClientHandler clientHandler;
     private String nodeX;
     private String nodeY;
 
-    public RemoveEdgeCommand(IClientHandler clientHandler, String nodeX, String nodeY) {
+    public RemoveEdgeCommand(IClientHandler<DirectedGraph> clientHandler, String nodeX, String nodeY) {
         this.nodeX = nodeX;
         this.nodeY = nodeY;
         this.clientHandler = clientHandler;
+        this.directedGraph = clientHandler.getSharedObject();
     }
 
     @Override
     public void execute() throws Exception {
-        boolean isRemoved = directedGraph.removeEdge(nodeX, nodeY);
-        if(isRemoved) {
+        try {
+            directedGraph.removeEdge(nodeX, nodeY);
             this.clientHandler.sendMessage(Message.edgeRemoved());
-        } else {
+        } catch (NodeNotFoundException e) {
             this.clientHandler.sendMessage(Message.nodeNotFound());
         }
     }

@@ -1,8 +1,10 @@
 package my.simple.protocol.parser;
 
+import my.simple.protocol.client.SimpleProtocolClientHandler;
 import my.simple.protocol.commands.*;
 import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import java.io.IOException;
 
@@ -33,8 +35,10 @@ public class SimpleProtocolCommandParserTest {
 
     @Test
     public void testParseAddNodeCommand() throws IOException {
+        SimpleProtocolClientHandler simpleProtocolClientHandler = Mockito.mock(SimpleProtocolClientHandler.class);
+
         SimpleProtocolCommandParser simpleProtocolCommandParser =
-                new SimpleProtocolCommandParser(null);
+                new SimpleProtocolCommandParser(simpleProtocolClientHandler);
 
         String stringCommand = "ADD NODE Phase2-Node-0";
         Command command = simpleProtocolCommandParser.parse(stringCommand);
@@ -46,8 +50,10 @@ public class SimpleProtocolCommandParserTest {
 
     @Test
     public void testParseRemoveNodeCommand() throws IOException {
+        SimpleProtocolClientHandler simpleProtocolClientHandler = Mockito.mock(SimpleProtocolClientHandler.class);
+
         SimpleProtocolCommandParser simpleProtocolCommandParser =
-                new SimpleProtocolCommandParser(null);
+                new SimpleProtocolCommandParser(simpleProtocolClientHandler);
 
         String stringCommand = "REMOVE NODE Phase2-Node-0";
         Command command = simpleProtocolCommandParser.parse(stringCommand);
@@ -59,8 +65,10 @@ public class SimpleProtocolCommandParserTest {
 
     @Test
     public void testParseAddEdgeCommand() throws IOException {
+        SimpleProtocolClientHandler simpleProtocolClientHandler = Mockito.mock(SimpleProtocolClientHandler.class);
+
         SimpleProtocolCommandParser simpleProtocolCommandParser =
-                new SimpleProtocolCommandParser(null);
+                new SimpleProtocolCommandParser(simpleProtocolClientHandler);
 
         String stringCommand = "ADD EDGE Phase4-Node-354 Phase4-Node-531 8";
         Command command = simpleProtocolCommandParser.parse(stringCommand);
@@ -76,8 +84,10 @@ public class SimpleProtocolCommandParserTest {
 
     @Test
     public void testParseRemoveEdgeCommand() throws IOException {
+        SimpleProtocolClientHandler simpleProtocolClientHandler = Mockito.mock(SimpleProtocolClientHandler.class);
+
         SimpleProtocolCommandParser simpleProtocolCommandParser =
-                new SimpleProtocolCommandParser(null);
+                new SimpleProtocolCommandParser(simpleProtocolClientHandler);
 
         String stringCommand = "REMOVE EDGE Phase4-Node-354 Phase4-Node-531";
         Command command = simpleProtocolCommandParser.parse(stringCommand);
@@ -91,8 +101,10 @@ public class SimpleProtocolCommandParserTest {
 
     @Test
     public void testParseShortestPathCommand() throws IOException {
+        SimpleProtocolClientHandler simpleProtocolClientHandler = Mockito.mock(SimpleProtocolClientHandler.class);
+
         SimpleProtocolCommandParser simpleProtocolCommandParser =
-                new SimpleProtocolCommandParser(null);
+                new SimpleProtocolCommandParser(simpleProtocolClientHandler);
 
         String stringCommand = "SHORTEST PATH Phase4-Node-354 Phase4-Node-531";
         Command command = simpleProtocolCommandParser.parse(stringCommand);
@@ -106,8 +118,10 @@ public class SimpleProtocolCommandParserTest {
 
     @Test
     public void testParseCloserThanCommand() throws IOException {
+        SimpleProtocolClientHandler simpleProtocolClientHandler = Mockito.mock(SimpleProtocolClientHandler.class);
+
         SimpleProtocolCommandParser simpleProtocolCommandParser =
-                new SimpleProtocolCommandParser(null);
+                new SimpleProtocolCommandParser(simpleProtocolClientHandler);
 
         String stringCommand = "CLOSER THAN 8 Phase4-Node-354";
         Command command = simpleProtocolCommandParser.parse(stringCommand);
@@ -121,8 +135,10 @@ public class SimpleProtocolCommandParserTest {
 
     @Test
     public void testParseUnknownCommand() throws IOException {
+        SimpleProtocolClientHandler simpleProtocolClientHandler = Mockito.mock(SimpleProtocolClientHandler.class);
+
         SimpleProtocolCommandParser simpleProtocolCommandParser =
-                new SimpleProtocolCommandParser(null);
+                new SimpleProtocolCommandParser(simpleProtocolClientHandler);
 
         String stringCommand = "UNKNOWN";
         Command command = simpleProtocolCommandParser.parse(stringCommand);

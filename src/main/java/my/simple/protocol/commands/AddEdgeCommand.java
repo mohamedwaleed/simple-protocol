@@ -3,28 +3,30 @@ package my.simple.protocol.commands;
 import my.simple.protocol.client.IClientHandler;
 import my.simple.protocol.client.Message;
 import my.simple.protocol.graph.DirectedGraph;
+import my.simple.protocol.graph.excpetions.NodeNotFoundException;
 
 public class AddEdgeCommand implements Command {
 
-    private DirectedGraph directedGraph = DirectedGraph.getInstance();
+    private DirectedGraph directedGraph;
     private IClientHandler clientHandler;
     private String nodeX;
     private String nodeY;
     private int weight;
 
-    public AddEdgeCommand(IClientHandler clientHandler, String nodeX, String nodeY, int weight) {
+    public AddEdgeCommand(IClientHandler<DirectedGraph> clientHandler, String nodeX, String nodeY, int weight) {
         this.nodeX = nodeX;
         this.nodeY = nodeY;
         this.weight = weight;
         this.clientHandler = clientHandler;
+        this.directedGraph = clientHandler.getSharedObject();
     }
 
     @Override
     public void execute() throws Exception {
-        boolean isAdded = directedGraph.addEdge(nodeX, nodeY, weight);
-        if(isAdded) {
+        try {
+            directedGraph.addEdge(nodeX, nodeY, weight);
             this.clientHandler.sendMessage(Message.edgeAdded());
-        } else {
+        } catch (NodeNotFoundException e) {
             this.clientHandler.sendMessage(Message.nodeNotFound());
         }
     }
