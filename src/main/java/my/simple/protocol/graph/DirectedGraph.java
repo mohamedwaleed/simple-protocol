@@ -3,13 +3,13 @@ package my.simple.protocol.graph;
 import my.simple.protocol.graph.excpetions.NodeNotFoundException;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class DirectedGraph {
 
     private static DirectedGraph directedGraph;
 
-    // DirectedGraph is synchronized so no need to affect the performance and use ConcurrentHashMap
-    private final Map<String, LinkedList<Pair<String, Integer>>> graph = new HashMap<>();
+    private final Map<String, LinkedList<Pair<String, Integer>>> graph = new ConcurrentHashMap<>();
 
     private DirectedGraph() {}
 
@@ -19,14 +19,13 @@ public class DirectedGraph {
          false if the node already exists
          true if the node has been added successfully
      */
-    public boolean addNode(String node) {
-        synchronized (graph) {
+    public synchronized boolean addNode(String node) {
             if (graph.containsKey(node)) {
                 return false;
             }
             graph.put(node, new LinkedList<>());
             return true;
-        }
+
     }
 
     /**
@@ -37,14 +36,13 @@ public class DirectedGraph {
      false if the one of the nodes does not exist
      true if the edge has been added successfully
      */
-    public boolean addEdge(String nodeX, String nodeY, int weight) {
-        synchronized (graph) {
+    public synchronized boolean addEdge(String nodeX, String nodeY, int weight) {
             if (!graph.containsKey(nodeX) || !graph.containsKey(nodeY)) {
                 return false;
             }
             graph.get(nodeX).add(new Pair<>(nodeY, weight));
             return true;
-        }
+
     }
 
     /**
@@ -53,14 +51,13 @@ public class DirectedGraph {
      false if the node not found
      true if the node has been removed successfully
      */
-    public boolean removeNode(String node) {
-        synchronized (graph) {
+    public synchronized boolean removeNode(String node) {
             if (!graph.containsKey(node)) {
                 return false;
             }
             graph.remove(node);
             return true;
-        }
+
     }
 
     /**
@@ -70,8 +67,7 @@ public class DirectedGraph {
      false if the one of the nodes does not exist
      true if the edge has been removed successfully
      */
-    public boolean removeEdge(String nodeX, String nodeY) {
-        synchronized (graph) {
+    public synchronized boolean removeEdge(String nodeX, String nodeY) {
             if (!graph.containsKey(nodeX) || !graph.containsKey(nodeY)) {
                 return false;
             }
@@ -80,7 +76,7 @@ public class DirectedGraph {
 
             graph.put(nodeX, edges);
             return true;
-        }
+
     }
 
     // added for the purpose of unit test

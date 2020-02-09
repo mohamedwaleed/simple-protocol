@@ -6,14 +6,16 @@ import my.simple.protocol.commands.ByeCommand;
 import my.simple.protocol.commands.Command;
 import my.simple.protocol.parser.exceptions.UnknownCommandException;
 import my.simple.protocol.server.session.Session;
+import org.apache.log4j.Logger;
 
 import java.io.*;
-import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 public class SimpleProtocolClientHandler implements IClientHandler {
+
+    final static Logger logger = Logger.getLogger(SimpleProtocolClientHandler.class);
 
     private IParser simpleProtocolCommandParser = new SimpleProtocolCommandParser(this);
     private BufferedWriter output;
@@ -40,6 +42,7 @@ public class SimpleProtocolClientHandler implements IClientHandler {
             while (true) {
                 try {
                     String receivedMessage = this.receiveMessage();
+                    logger.info("Received message " + receivedMessage + " from client " + clientName);
                     Command command = simpleProtocolCommandParser.parse(receivedMessage);
                     command.execute();
                     if(command instanceof ByeCommand) {
