@@ -3,12 +3,12 @@ package my.simple.protocol.commands;
 import my.simple.protocol.client.Message;
 import my.simple.protocol.client.SimpleProtocolClientHandler;
 import my.simple.protocol.graph.DirectedGraph;
-import my.simple.protocol.graph.excpetions.NodeNotFoundException;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-public class AddEdgeCommandTest {
+public class RemoveNodeCommandTest {
+
     @Before
     public void beforeEach() {
         DirectedGraph.getInstance().clear();
@@ -21,30 +21,25 @@ public class AddEdgeCommandTest {
 
         Mockito.when(simpleProtocolClientHandler.getSharedObject()).thenReturn(directedGraph);
 
-        String nodeX = "A";
-        String nodeY = "B";
-        int weight = 1;
+        String node = "A";
 
-        AddEdgeCommand addEdgeCommand = new AddEdgeCommand(simpleProtocolClientHandler, nodeX, nodeY, weight);
-        addEdgeCommand.execute();
+        RemoveNodeCommand removeNodeCommand = new RemoveNodeCommand(simpleProtocolClientHandler, node);
+        removeNodeCommand.execute();
 
-        Mockito.verify(simpleProtocolClientHandler, Mockito.times(1)).sendMessage(Message.edgeAdded());
-        Mockito.verify(directedGraph, Mockito.times(1)).addEdge(nodeX, nodeY, weight);
+        Mockito.verify(simpleProtocolClientHandler, Mockito.times(1)).sendMessage(Message.nodeRemoved());
+        Mockito.verify(directedGraph, Mockito.times(1)).removeNode(node);
     }
 
     @Test
     public void testExecuteWhenThrowsException() throws Exception {
-        String nodeX = "A";
-        String nodeY = "B";
-        int weight = 1;
-
         SimpleProtocolClientHandler simpleProtocolClientHandler = Mockito.mock(SimpleProtocolClientHandler.class);
         DirectedGraph directedGraph = DirectedGraph.getInstance();
 
         Mockito.when(simpleProtocolClientHandler.getSharedObject()).thenReturn(directedGraph);
+        String node = "A";
 
-        AddEdgeCommand addEdgeCommand = new AddEdgeCommand(simpleProtocolClientHandler, nodeX, nodeY, weight);
-        addEdgeCommand.execute();
+        RemoveNodeCommand removeNodeCommand = new RemoveNodeCommand(simpleProtocolClientHandler, node);
+        removeNodeCommand.execute();
 
         Mockito.verify(simpleProtocolClientHandler, Mockito.times(1)).sendMessage(Message.nodeNotFound());
     }
