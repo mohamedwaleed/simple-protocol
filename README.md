@@ -49,14 +49,18 @@ or
 ```
 make run
 ```
-## packaging
-* packaging is only supported using maven
-* to generate a fat jar for the project
+## packaging and execution
+* Packaging is only supported using maven
+* To generate a fat jar for the project
 ```
 mvn clean compile package
 ```
 this will generate a jar file in the `target` directory 
 
+* In order to execute the generated jar file
+```
+java -jar <jar-file>
+```
 ## Authors
 
 * Mohamed Waleed
