@@ -21,6 +21,8 @@ WORKDIR /simple-protocol
 COPY --from=builder /simple-protocol/target/${PACKAGE_NAME} /simple-protocol
 COPY --from=builder /simple-protocol/scripts/container/entrypoint /simple-protocol
 
+RUN chmod +x /simple-protocol/entrypoint
+
 EXPOSE $SERVER_PORT
 ENTRYPOINT ["/sbin/tini", "--", "/simple-protocol/entrypoint"]
 
