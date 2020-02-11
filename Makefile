@@ -1,6 +1,9 @@
 SHELL = /bin/bash
 
-.PHONY: run
+.PHONY: run test
 
-dev:
-	@scripts/host/run ${ARGS}
+run:
+	@scripts/host/$@ ${ARGS}
+
+test:
+	@scripts/host/$@ ${ARGS}

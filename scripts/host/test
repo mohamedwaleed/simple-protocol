@@ -1,7 +1,7 @@
 #!/bin/bash
 
-CONTAINER_NAME=simple-protocol-server
-IMAGE_NAME=simple-protocol-server
+CONTAINER_NAME=simple-protocol-server_test
+IMAGE_NAME=simple-protocol-server_test
 SERVER_PORT=50000
 PACKAGE_NAME=simple-protocol
 
@@ -18,10 +18,10 @@ printf '\t-->Building server dev image\n'
 DOCKER_BUILDKIT=1 docker build \
     -t ${CONTAINER_NAME} \
     --build-arg PACKAGE_NAME=${PACKAGE_NAME} \
-    --target run \
+    --target test \
     .
 
-printf '\t-->Running server\n'
+printf '\t-->Running tests\n'
 docker run -it \
   --name ${CONTAINER_NAME} \
   -p ${SERVER_PORT}:${SERVER_PORT} \
