@@ -1,0 +1,27 @@
+#!/bin/bash
+
+CONTAINER_NAME=simple-protocol-server
+IMAGE_NAME=simple-protocol-server
+SERVER_PORT=50000
+PACKAGE_NAME=simple-protocol
+
+IS_CONTAINER_RUNNING=$(docker ps -a --filter name="${CONTAINER_NAME}" -q)
+
+printf '\t--> Removing running container\n'
+if [[ -n ${IS_CONTAINER_RUNNING} ]]; then
+  docker rm -f "${CONTAINER_NAME}"
+fi
+
+printf '==> Starting container\n'
+
+printf '\t-->Building server dev image\n'
+DOCKER_BUILDKIT=1 docker build \
+    -t ${CONTAINER_NAME} \
+    --build-arg PACKAGE_NAME=${PACKAGE_NAME} \
+    .
+
+printf '\t-->Running server\n'
+docker run -it \
+  --name ${CONTAINER_NAME} \
+  -p ${SERVER_PORT}:${SERVER_PORT} \
+   "${IMAGE_NAME}"

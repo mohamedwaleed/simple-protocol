@@ -23,6 +23,7 @@ public class SimpleProtocolServer {
     public void start(int port) {
         try {
             serverSocket = new ServerSocket(port);
+            logger.info("Server started");
             while(true) {
                 Socket socket = serverSocket.accept();
                 Session session = Session.createNewSession(new UUIDSessionIdGenerator(), new Date(), 30000);

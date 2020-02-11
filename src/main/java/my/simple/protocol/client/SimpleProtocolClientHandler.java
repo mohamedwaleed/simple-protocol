@@ -46,9 +46,9 @@ public class SimpleProtocolClientHandler implements IClientHandler<DirectedGraph
             while (true) {
                 try {
                     String receivedMessage = this.receiveMessage();
-                    logger.info("Received message " + receivedMessage + " from client " + clientName);
                     Command command = simpleProtocolCommandParser.parse(receivedMessage);
                     command.execute();
+                    logger.info("Received message " + receivedMessage + " from client " + clientName);
                     if(command instanceof ByeCommand) {
                         break;
                     }
