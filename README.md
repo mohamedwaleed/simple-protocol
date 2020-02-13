@@ -7,12 +7,12 @@ These instructions will guide you on how to configure and run the project
 
 ### Prerequisites
 
-* Docker
-
+* Docker (version that supports multi stage)
+    tested with 2.1.0 
 Or
 
 * Java 8 or above
-* Maven
+* Maven (tested with 3.6.1)
 
 ### Run the project
 To run the project, there are 2 ways to achieve that
