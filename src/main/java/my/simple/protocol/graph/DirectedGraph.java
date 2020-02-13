@@ -10,7 +10,7 @@ public class DirectedGraph {
 
     private static DirectedGraph directedGraph;
 
-    private final Map<String, LinkedList<Pair<String, Integer>>> graph = new HashMap<>();
+    private final Map<String, LinkedList<Pair<String, Integer>>> graph = new ConcurrentHashMap<>();
 
     private DirectedGraph() {}
 
@@ -30,6 +30,7 @@ public class DirectedGraph {
     /**
      @param nodeX the string represents the node x
      @param nodeY the string represents the node y
+     @param weight represents the weight of the edge
      @param weight represents the weight of the edge
      @throws NodeNotFoundException
      */
@@ -89,48 +90,47 @@ public class DirectedGraph {
      @throws NodeNotFoundException if one of the nodes is not found
      */
     public synchronized int shortestPath(String nodeX, String nodeY) throws NodeNotFoundException {
-        Map<String, LinkedList<Pair<String, Integer>>> graphSnapshoot;
+        Map<String, LinkedList<Pair<String, Integer>>> graphSnapshot;
         synchronized (graph) {
             if (!graph.containsKey(nodeX) || !graph.containsKey(nodeY)) {
                 throw new NodeNotFoundException();
             }
-            graphSnapshoot = new HashMap<>(graph);
+            graphSnapshot = new HashMap<>(graph);
 
-            Map<String, Integer> distance = new HashMap<>();
+        }
+        Map<String, Integer> distance = new HashMap<>();
 
+        graphSnapshot.forEach((k, v) -> distance.put(k, Integer.MAX_VALUE));
 
-            graphSnapshoot.forEach((k, v) -> distance.put(k, Integer.MAX_VALUE));
+        Queue<Pair<Integer, String>> priorityQueue = new PriorityQueue<>();
+        priorityQueue.add(new Pair<>(0, nodeX));
+        distance.put(nodeX, 0);
 
-            Queue<Pair<Integer, String>> priorityQueue = new PriorityQueue<>();
-            priorityQueue.add(new Pair<>(0, nodeX));
-            distance.put(nodeX, 0);
+        while (!priorityQueue.isEmpty()) {
+            Pair<Integer, String> minNode = priorityQueue.poll();
+            String currentNode = minNode.getSecond();
+            Integer currentNodeDistance = distance.get(currentNode);
 
-            while (!priorityQueue.isEmpty()) {
-                Pair<Integer, String> minNode = priorityQueue.poll();
-                String currentNode = minNode.getSecond();
-                Integer currentNodeDistance = distance.get(currentNode);
-
-                if (currentNode.equals(nodeY)) {
-                    return distance.get(nodeY);
-                }
-
-                List<Pair<String, Integer>> edges = graphSnapshoot.get(currentNode);
-
-                for (Pair<String, Integer> edge : edges) {
-                    String toNode = edge.getFirst();
-                    Integer edgeWeight = edge.getSecond();
-                    Integer newDistance = currentNodeDistance + edgeWeight;
-                    if (newDistance < distance.get(toNode)) {
-                        distance.put(toNode, newDistance);
-                        priorityQueue.add(new Pair<>(distance.get(toNode), toNode));
-                    }
-                }
-
+            if (currentNode.equals(nodeY)) {
+                return distance.get(nodeY);
             }
 
+            List<Pair<String, Integer>> edges = graphSnapshot.get(currentNode);
 
-            return Integer.MAX_VALUE;
+            for (Pair<String, Integer> edge : edges) {
+                String toNode = edge.getFirst();
+                Integer edgeWeight = edge.getSecond();
+                Integer newDistance = currentNodeDistance + edgeWeight;
+                if (newDistance < distance.get(toNode)) {
+                    distance.put(toNode, newDistance);
+                    priorityQueue.add(new Pair<>(distance.get(toNode), toNode));
+                }
+            }
+
         }
+
+
+        return Integer.MAX_VALUE;
     }
 
 
@@ -141,50 +141,50 @@ public class DirectedGraph {
      @throws NodeNotFoundException if one of the nodes is not found
      */
     public synchronized List<String> closerThan(String node, int weight) throws NodeNotFoundException {
+        Map<String, LinkedList<Pair<String, Integer>>> graphSnapshot;
+
         synchronized (graph) {
 
-            Map<String, LinkedList<Pair<String, Integer>>> graphSnapshoot;
             if (!graph.containsKey(node)) {
                 throw new NodeNotFoundException();
             }
-            graphSnapshoot = new HashMap<>(graph);
-            Map<String, Integer> distance = new HashMap<>();
+            graphSnapshot = new HashMap<>(graph);
+        }
+        Map<String, Integer> distance = new HashMap<>();
 
+        graphSnapshot.forEach((k, v) -> distance.put(k, Integer.MAX_VALUE));
 
-            graphSnapshoot.forEach((k, v) -> distance.put(k, Integer.MAX_VALUE));
+        Queue<Pair<Integer, String>> priorityQueue = new PriorityQueue<>();
+        priorityQueue.add(new Pair<>(0, node));
+        distance.put(node, 0);
 
-            Queue<Pair<Integer, String>> priorityQueue = new PriorityQueue<>();
-            priorityQueue.add(new Pair<>(0, node));
-            distance.put(node, 0);
+        while (!priorityQueue.isEmpty()) {
+            Pair<Integer, String> minNode = priorityQueue.poll();
+            String currentNode = minNode.getSecond();
+            Integer currentNodeDistance = distance.get(currentNode);
 
-            while (!priorityQueue.isEmpty()) {
-                Pair<Integer, String> minNode = priorityQueue.poll();
-                String currentNode = minNode.getSecond();
-                Integer currentNodeDistance = distance.get(currentNode);
+            List<Pair<String, Integer>> edges = graphSnapshot.get(currentNode);
 
-                List<Pair<String, Integer>> edges = graphSnapshoot.get(currentNode);
-
-                for (Pair<String, Integer> edge : edges) {
-                    String toNode = edge.getFirst();
-                    Integer edgeWeight = edge.getSecond();
-                    Integer newDistance = currentNodeDistance + edgeWeight;
-                    if (newDistance < distance.get(toNode)) {
-                        distance.put(toNode, newDistance);
-                        priorityQueue.add(new Pair<>(distance.get(toNode), toNode));
-                    }
+            for (Pair<String, Integer> edge : edges) {
+                String toNode = edge.getFirst();
+                Integer edgeWeight = edge.getSecond();
+                Integer newDistance = currentNodeDistance + edgeWeight;
+                if (newDistance < weight && newDistance < distance.get(toNode)) {
+                    distance.put(toNode, newDistance);
+                    priorityQueue.add(new Pair<>(distance.get(toNode), toNode));
                 }
-
             }
 
-            List<String> nodes = new ArrayList<>();
-            distance.forEach((nodeName, shortestWeight) -> {
-                if (!nodeName.equals(node) && shortestWeight < weight) {
-                    nodes.add(nodeName);
-                }
-            });
-            Collections.sort(nodes);
-            return nodes;
         }
+
+        List<String> nodes = new ArrayList<>();
+        distance.forEach((nodeName, shortestWeight) -> {
+            if (!nodeName.equals(node) && shortestWeight < weight) {
+                nodes.add(nodeName);
+            }
+        });
+        Collections.sort(nodes);
+        return nodes;
     }
 
     public static synchronized DirectedGraph getInstance() {
